@@ -123,6 +123,6 @@ Transaction should succeed
 Wait 20-30 seconds again and look in the testnet for the last transaction related
 to our script, it should show something like this
 
-[Example 1 - Expected result](!images/example-1.png)
+![Example 1 - Expected result](./images/example-1.png)
 
 You should, again, restart the node.
