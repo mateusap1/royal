@@ -1,0 +1,46 @@
+{
+    "magic": 1097911063,
+    "protocol_params_file": "./data/pparams.json",
+    "node": {
+        "topology": "/home/mateusap1/Documentos/Apps/Cardano/cardano-node/testnet-topology.json",
+        "database_path": "/home/mateusap1/Documentos/Apps/Cardano/cardano-node/db",
+        "socket_path": "/home/mateusap1/Documentos/Apps/Cardano/cardano-node/node.socket",
+        "config": "/home/mateusap1/Documentos/Apps/Cardano/cardano-node/testnet-config.json",
+        "host_addr": "0.0.0.0",
+        "port": 3001
+    },
+    "users": [
+        {
+            "name": "alice",
+            "path": "~/Documentos/Apps/Cardano/cardano-node/keys/1"
+        },
+        {
+            "name": "bob",
+            "path": "~/Documentos/Apps/Cardano/cardano-node/keys/2"
+        },
+        {
+            "name": "charlie",
+            "path": "~/Documentos/Apps/Cardano/cardano-node/keys/3"
+        }
+    ],
+    "scripts": [
+        {
+            "name": "first_case",
+            "script": "./scripts/first_case.plutus",
+            "datum": "./data/datum.json",
+            "redeemer": "./data/redeemer.json"
+        },
+        {
+            "name": "third_case",
+            "script": "./scripts/third_case.plutus",
+            "datum": "./data/datum.json",
+            "redeemer": "./data/redeemer.json"
+        },
+        {
+            "name": "fifth_case",
+            "script": "./scripts/fifth_case.plutus",
+            "datum": "./data/datum.json",
+            "redeemer": "./data/redeemer.json"
+        }
+    ]
+}
