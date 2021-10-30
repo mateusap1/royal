@@ -67,9 +67,9 @@ def empty_third_case_script():
         blc = 12
 
     ch.distribute_from_script("alice", script_name, [
-        {"user_address": alice.addr, "amount": int(blc/3)+1},
-        {"user_address": bob.addr, "amount": int(blc/3)+1},
-        {"user_address": charlie.addr, "amount": int(blc/3)+1}
+        {"user_address": alice.addr, "amount": int(blc/3)+100},
+        {"user_address": bob.addr, "amount": int(blc/3)+100},
+        {"user_address": charlie.addr, "amount": int(blc/3)+100}
     ])
 
 def empty_fifth_case_script():
