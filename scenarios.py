@@ -62,7 +62,7 @@ def empty_third_case_script():
 
     if blc < ada(12):
         ch.send_to_script("alice", script_name, (ada(12) - blc))
-        wait_for_balance(ch, addr, ada(12), INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, ada(12), INTERVALS)
 
         blc = 12
 
@@ -118,7 +118,7 @@ def first_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_first_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -132,7 +132,7 @@ def first_scenario():
 
     print(f"9 ADA sent from Alice to {addr}")
 
-    wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(9), INTERVALS)
 
     ch.distribute_from_script("alice", script_name, [
         {"user_address": alice.addr, "amount": ada(3)},
@@ -165,7 +165,7 @@ def second_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_first_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -177,7 +177,7 @@ def second_scenario():
 
     print(f"9 ADA sent from Alice to {addr}")
 
-    wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(9), INTERVALS)
 
     print(
         "Alice will try to consume the script, giving 9 ADA to herself. " +
@@ -209,7 +209,7 @@ def third_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_third_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -223,7 +223,7 @@ def third_scenario():
 
     print(f"9 ADA sent from Alice to {addr}")
 
-    wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(9), INTERVALS)
 
     print(
         "Alice will try to consume the script, giving 3 ADA to herself, " +
@@ -258,7 +258,7 @@ def fourth_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_first_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -272,21 +272,21 @@ def fourth_scenario():
 
     print(f"3 ADA sent from Alice to {addr}")
 
-    wait_for_balance(ch, addr, ada(3), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(3), INTERVALS)
 
     # Bob sends 3 ADA
     ch.send_to_script("bob", script_name, ada(3))
 
     print(f"3 ADA sent from Bob to {addr}")
 
-    wait_for_balance(ch, addr, ada(6), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(6), INTERVALS)
 
     # Charlie sends 3 ADA
     ch.send_to_script("charlie", script_name, ada(3))
 
     print(f"3 ADA sent from Charlie to {addr}")
 
-    wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(9), INTERVALS)
 
     ch.distribute_from_script("alice", script_name, [
         {"user_address": alice.addr, "amount": ada(3)},
@@ -316,7 +316,7 @@ def fifth_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_fifth_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     # Now we also need David
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
@@ -331,7 +331,7 @@ def fifth_scenario():
 
     print(f"8 ADA sent from Alice to {addr}")
 
-    wait_for_balance(ch, addr, ada(8), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(8), INTERVALS)
 
     ch.distribute_from_script("alice", script_name, [
         {"user_address": bob.addr, "amount": ada(4)},
@@ -362,7 +362,7 @@ def sixth_scenario():
     if ch.wallet_balance(addr) > 0:
         print(f"Script not empty, calling function to empty {addr}")
         empty_first_case_script()
-        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
+        wait_for_balance(ch, addr, 0, INTERVALS)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -372,18 +372,11 @@ def sixth_scenario():
     charlie = ch.users["charlie"]
 
     # Alice sends 9 ADA to the scipt
-    ch.send_to_script("alice", script_name, ada(9))
+    ch.send_to_script("alice", script_name, ada(18))
 
-    print(f"9 ADA sent from Alice to {addr}")
+    print(f"18 ADA sent from Alice to {addr}")
 
-    # wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
-
-    # Bob sends 9 ADA to the scipt
-    ch.send_to_script("bob", script_name, ada(9))
-
-    print(f"9 ADA sent from Bob to {addr}")
-
-    wait_for_balance(ch, addr, ada(18), INTERVALS, MAX_TIME)
+    wait_for_balance(ch, addr, ada(18), INTERVALS)
 
     ch.distribute_from_script("alice", script_name, [
         {"user_address": alice.addr, "amount": ada(3)},
@@ -400,7 +393,7 @@ def sixth_scenario():
         "Alice tried to consume the script, giving 3 ADA to herself, " +
         "3 ADA to Bob, 3 ADA to Charlie and keeping 9 ADA in the script"
     )
-    print("Transaction should succeed, please restart the node for the next scenario...")
+    print("Transaction should succeed")
 
 
 def main():

@@ -259,3 +259,31 @@ Alice tried to consume the script, giving 4 ADA to Bob and 4 ADA to Charlie
 And the tesnet explorer should look something like this
 
 ![Example 5 - Expected result](./images/example-5.png)
+
+## Sixth Scenario
+
+In the sixth scenario, Alice sends 18 ADA to the script with the same parameters
+as the first and second scenarios. Then, Alice consumes the script, giving 3 ADA
+to herself, 3 ADA to Bob and 3 ADA to Charlie and keeping 9 ADA at the script.
+
+This scenario should show that not all the value stored inside the script must
+be distributed, anyone may distribute only a fraction, as long as, the
+proportion of the receivers amount stays the same (in this case 1/3, 1/3 and
+1/3) and the minimum utxo value is exceeded.
+
+Execute
+
+```bash
+python3 scenarios.py 6
+```
+
+After following the steps you should see
+
+```
+Transaction successfully submitted.
+Alice tried to consume the script, giving 3 ADA to herself, 3 ADA to Bob, 3 ADA to Charlie and keeping 9 ADA in the script
+```
+
+And the tesnet explorer should look something like this
+
+![Example 6 - Expected result](./images/example-6.png)
