@@ -103,7 +103,7 @@ Transaction successfully submitted.
 Please restart the node to update the script balance
 ```
 
-In both cases it will ask you to restart the node (if the transaction was
+In both cases it will be asked to restart the node (if the transaction was
 successful) so the node can update it's information. To make sure the
 transaction was submitted, you should wait 20-30 seconds and search for the
 script address in the [testnet explorer](https://explorer.cardano-testnet.iohkdev.io)
@@ -126,3 +126,46 @@ to our script, it should show something like this
 ![Example 1 - Expected result](./images/example-1.png)
 
 You should, again, restart the node.
+
+## Second Scenario
+
+In the second scenario, Alice sends 9 ADA to the script with the distribution
+nd minimum UtxO value stays the same as in the first scenario, the difference is
+that now Alice thinks she's really smart, so she'll try to grab all the
+deposited tokens to herself (instead of distributing it). Of course, the script
+validator should fail the transaction.
+
+As in the first case, make sure the node is 100% synced and that it was
+restarted after the last scenario transaction submission.
+
+To start, run the following command
+
+```bash
+python3 scenarios.py 2
+```
+
+You should, again, see the following message
+
+```
+Transaction successfully submitted.
+9 ADA sent from Alice to addr_test1wzlrk5ra8pts700jczd44jg328zpz7mjjc7wqfwt3n48pngfdawwn
+Please restart the node to update the script balance
+```
+
+And, after you confirmed in the testnet explorer that the transaction was
+successful, you should restart the node.
+
+Finally after you restarted the node and some time has passed, you should see
+the following message
+
+```
+Alice will try to consume the script, giving 9 ADA to herself. Since this is the wrong d
+istribution, you should receive an exception.
+Command failed: transaction build  Error: The following scripts have execution failures:
+the script for transaction input 1 (in the order of the TxIds) failed with The Plutus sc
+ript evaluation failed: An error has occurred:  User error:
+The provided Plutus code called 'error'.
+```
+
+and you should see a "Transaction build failed" exception. It meas Alice wasn't
+able to put her devious plan in practice
