@@ -2,7 +2,6 @@ from CardanoHandler import CardanoHandler
 from utils import ada, wait_for_balance
 import sys
 
-MAX_TIME = 300
 INTERVALS = 20
 
 

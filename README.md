@@ -4,6 +4,17 @@ In order to facilitate the testing of the distribution script, I decided to make
 python wrapper around cardano-cli. After that, I made six functions, each one
 testing a different scenario I thought could show script vulnerabilities.
 
+## Table Of Contents
+* [Setup](#setup)
+* [First Scenario](#first-scenario)
+* [Second Scenario](#second-scenario)
+* [Third Scenario](#third-scenario)
+* [Fourth Scenario](#fourth-scenario)
+* [Fifth Scenario](#fifth-scenario)
+* [Sixth Scenario](#sixth-scenario)
+
+## Setup
+
 Before moving into the scenarios and how to try them in the testnet, make sure that
 cardano-node and cardano-cli are installed
 
@@ -12,17 +23,7 @@ cardano-node --version
 ```
 
 ```bash
-cardano-node 1.30.1 - linux-x86_64 - ghc-8.10
-git rev 0fb43f4e3da8b225f4f86557aed90a183981a64f
-```
-
-```bash
 cardano-cli --version
-```
-
-```bash
-cardano-cli 1.30.1 - linux-x86_64 - ghc-8.10
-git rev 0fb43f4e3da8b225f4f86557aed90a183981a64f
 ```
 
 If they are not, you may follow the intructions
@@ -49,6 +50,13 @@ address from the specific user are located ("payment.addr", "payment.vkey",
 "payment.skey"). They should all have the name "payment" and be located at
 individual folders.
 
+If you don't know how to generate keys, take a look at
+[this guide](https://cardano-foundation.gitbook.io/stake-pool-course/stake-pool-guide/stake-pool-operations/keys_and_addresses).
+Also, make sure that Alice has a reasonable amount of tADA, since we'll be using
+that a lot. You can get some free tADA in
+[this page](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
+
+
 Finally, we can start to run our scenarios
 
 ## First scenario
@@ -59,7 +67,7 @@ minimum UTxO value of 1 ADA. Then Alice consumes the script, giving 3 ADA to
 herself, 3 ADA to Bob and 3 ADA to Charlie. Because the distribution is correct,
 the transaction should validate.
 
-This scenario will show us that simple distributions are indeed working
+This scenario will show us that simple distributions are indeed working.
 
 Before running it, make sure the node is running and is synchronized with the
 testnet.
@@ -68,6 +76,7 @@ testnet.
 cardano-cli query tip --tesnet-magic 1097911063
 ```
 
+Should return something like this
 ```bash
 {
     "epoch": 165,
@@ -88,8 +97,7 @@ To start, run the following command
 python3 scenarios.py 1
 ```
 
-After executing the command, you should either see a message saying that the
-script was not empty
+After executing the command, you could see a message like this
 
 ```
 Script not empty, calling function to empty addr_test1wzlrk5ra8pts700jczd44jg328zpz7mjjc7wqfwt3n48pngfdawwn
@@ -97,7 +105,22 @@ Transaction successfully submitted.
 Please restart the node to update the script balance
 ```
 
-or that 9 ADA were sent from Alice to the script
+Every time you see this, it means that the script already had ADA inside, so the
+program will distribute it accordingly, leaving it without any tokens so we can
+simulate our scenario correctly.
+
+You can also see that it asks you to restart the node. This will be very common
+in the next steps because apparantly the node doesn't update it's own ledger
+after submitting a transaction and only does it after restarted.
+
+If this doesn't happen to your node, though, you can simply move on. Otherwise,
+stop the node and start it again every time you see this message. It's also
+ideal that you wait a while before you stop the node, so that it has some time
+to broadcast the transaction.
+
+If you don't see any of that, good, it means that the script was already empty.
+
+After "cleaning" the script, you should see the following message
 
 ```
 Transaction successfully submitted.
@@ -105,16 +128,13 @@ Transaction successfully submitted.
 Please restart the node to update the script balance
 ```
 
-In both cases it will be asked to restart the node (if the transaction was
-successful) so the node can update it's information. To make sure the
-transaction was submitted, you should wait 20-30 seconds and search for the
-script address in the [testnet explorer](https://explorer.cardano-testnet.iohkdev.io)
+You can confirm that the transaction was submitted, by looking at
+[testnet explorer](https://explorer.cardano-testnet.iohkdev.io). Sometimes it
+takes 30 seconds, some times it's pretty fast, just make sure that it shows
+a balance of 9 ADA.
 
-If you see that the balance of the script is 0 ADA in the first case or 9 ADA in
-the second, it worked and you should restart the node.
-
-After the node is restarted, there could be a 20 seconds dealay, but you should
-receive the following message
+If you do, restart the node and, after some time, you'll see the following
+message
 
 ```
 Transaction successfully submitted.
@@ -127,18 +147,19 @@ to our script, it should show something like this
 
 ![Example 1 - Expected result](./images/example-1.png)
 
-You should, again, restart the node.
+Congratulations, the script works (at least it's basic functionality).
+
+Restart the node for the next scenario.
 
 ## Second Scenario
 
-In the second scenario, Alice sends 9 ADA to the script with the distribution
-nd minimum UtxO value stays the same as in the first scenario, the difference is
-that now Alice thinks she's really smart, so she'll try to grab all the
-deposited tokens to herself (instead of distributing it). Of course, the script
-validator should fail the transaction.
+In the second scenario, Alice sends 9 ADA to the script with the same paramaters
+as in the first scenario, the difference is that now Alice tries to transfer all
+the tokens to herself (instead of distributing it). Of course, the script
+validator should fail.
 
 This scenario will show us that the script is "guarding" the transaction and not
-allowing wrong distributions
+allowing wrong distributions.
 
 As in the first case, make sure the node is 100% synced and that it was
 restarted after the last scenario transaction submission.
@@ -157,15 +178,10 @@ Transaction successfully submitted.
 Please restart the node to update the script balance
 ```
 
-And, after you confirmed in the testnet explorer that the transaction was
-successful, you should restart the node.
-
-Finally after you restarted the node and some time has passed, you should see
-the following message
+After confirming the transaction in the testnet explorer and restarting the
+node, you should see the following message
 
 ```
-Alice will try to consume the script, giving 9 ADA to herself. Since this is the wrong d
-istribution, you should receive an exception.
 Command failed: transaction build  Error: The following scripts have execution failures:
 the script for transaction input 1 (in the order of the TxIds) failed with The Plutus sc
 ript evaluation failed: An error has occurred:  User error:
@@ -173,12 +189,12 @@ The provided Plutus code called 'error'.
 ```
 
 and you should see a "Transaction build failed" exception. It meas Alice wasn't
-able to put her devious plan in practice
+able to put her plan in practice and the transaction she made failed.
 
 ## Third Scenario
 
 In the third scenario, Alice sends 9 ADA to the script with the same distribution
-as the other scenarios, but with a minimum UTxO value of 4 ADA. Then Alice
+as in the other scenarios, but with a minimum UTxO value of 4 ADA. Then Alice
 tries to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to
 Charlie. This should, of course, fail, since the values distributed are below
 the minimum threshold.
@@ -194,7 +210,6 @@ asked you to (after making sure the balance in the tesnet was correct), you
 should see the final result
 
 ```
-Alice will try to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to Charlie. Since this is below the minimum UTxO value, the transaction should fail, throwing an exception
 Command failed: transaction build  Error: The following scripts have execution failures:
 the script for transaction input 1 (in the order of the TxIds) failed with The Plutus script evaluation failed: An error has occurred:  User error:
 The provided Plutus code called 'error'.
