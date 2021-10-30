@@ -329,7 +329,7 @@ def fifth_scenario():
     # Alice (not one of the receivers) sends 8 ADA to the scipt
     ch.send_to_script("alice", script_name, ada(8))
 
-    print(f"9 ADA sent from Alice to {addr}")
+    print(f"8 ADA sent from Alice to {addr}")
 
     wait_for_balance(ch, addr, ada(8), INTERVALS, MAX_TIME)
 

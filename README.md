@@ -231,3 +231,31 @@ And the last transaction from the testnet should be something like this
 ![Example 4 - Expected result](./images/example-4.png)
 
 Restart the node to proceed to the next scenario
+
+## Fifth scenario
+
+In the fifth scenario, Alice sends 8 ADA to the script with the distribution
+`{Bob: 1, Charlie: 1}` (meaning Bob and Charlie should receive one half each)
+and a minimum UTxO value of 1 ADA. Then Alice consumes the script,
+giving 4 ADA to Bob and 4 ADA to Charlie.
+
+This scenario should show that a user doesn't need to be a distributor to send
+ADA to the script or distribute it's value as long as the distribution is
+followed and the minimum UTxO value is exceeded.
+
+Execute
+
+```bash
+python3 scenarios.py 5
+```
+
+After following the steps you should see
+
+```
+Transaction successfully submitted.
+Alice tried to consume the script, giving 4 ADA to Bob and 4 ADA to Charlie
+```
+
+And the tesnet explorer should look something like this
+
+![Example 5 - Expected result](./images/example-5.png)
