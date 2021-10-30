@@ -206,6 +206,7 @@ class Tx(object):
 
         if exit_code != 0:
             shutil.rmtree(TEMP_PATH)
+            print(f"{build_command}\n Failed command\n")
             raise Exception("Transaction build failed")
 
         required_sigs = "\n".join(

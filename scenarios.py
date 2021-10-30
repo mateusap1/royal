@@ -20,9 +20,12 @@ def empty_first_case_script():
     # Make sure script is not empty
     if blc == 0:
         raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
+            f"Script {addr} already holds tokens. Make sure it's not empty"
         )
     
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
     alice = ch.users["alice"]
     bob = ch.users["bob"]
     charlie = ch.users["charlie"]
@@ -31,6 +34,69 @@ def empty_first_case_script():
         {"user_address": alice.addr, "amount": int(blc/3)+1},
         {"user_address": bob.addr, "amount": int(blc/3)+1},
         {"user_address": charlie.addr, "amount": int(blc/3)+1}
+    ])
+
+
+def empty_third_case_script():
+    ch = CardanoHandler()
+    script_name = "third_case"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+    blc = ch.wallet_balance(addr)
+
+    # Make sure script is not empty
+    if blc == 0:
+        raise Exception(
+            f"Script {addr} already holds tokens. Make sure it's not empty"
+        )
+    
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    alice = ch.users["alice"]
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    if blc < ada(12):
+        ch.send_to_script("alice", script_name, (ada(12) - blc))
+        wait_for_balance(ch, addr, ada(12), INTERVALS, MAX_TIME)
+
+        blc = 12
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": alice.addr, "amount": int(blc/3)+1},
+        {"user_address": bob.addr, "amount": int(blc/3)+1},
+        {"user_address": charlie.addr, "amount": int(blc/3)+1}
+    ])
+
+def empty_fifth_case_script():
+    ch = CardanoHandler()
+    script_name = "fifth_case"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+    blc = ch.wallet_balance(addr)
+
+    # Make sure script is not empty
+    if blc == 0:
+        raise Exception(
+            f"Script {addr} already holds tokens. Make sure it's not empty"
+        )
+    
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": bob.addr, "amount": int(blc/2)+1},
+        {"user_address": charlie.addr, "amount": int(blc/2)+1}
     ])
 
 
@@ -50,9 +116,9 @@ def first_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_first_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -78,7 +144,7 @@ def first_scenario():
         "Alice tried to consume the script, giving 3 ADA to herself, " +
         "3 ADA to Bob and 3 ADA to Charlie"
     )
-    print("Transaction should succeed")
+    print("Transaction should succeed, please restart the node for the next scenario...")
 
 
 def second_scenario():
@@ -97,9 +163,9 @@ def second_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_first_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -114,7 +180,7 @@ def second_scenario():
     wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
 
     print(
-        "Alice will try to consume the script, giving 9 ADA to herself. " + \
+        "Alice will try to consume the script, giving 9 ADA to herself. " +
         "Since this is the wrong distribution, you should receive an exception."
     )
 
@@ -141,9 +207,9 @@ def third_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_third_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -160,8 +226,8 @@ def third_scenario():
     wait_for_balance(ch, addr, ada(9), INTERVALS, MAX_TIME)
 
     print(
-        "Alice will try to consume the script, giving 3 ADA to herself, " + \
-        "3 ADA to Bob and 3 ADA to Charlie. Since this is below the minimum " + \
+        "Alice will try to consume the script, giving 3 ADA to herself, " +
+        "3 ADA to Bob and 3 ADA to Charlie. Since this is below the minimum " +
         "UTxO value, the transaction should fail, throwing an exception"
     )
 
@@ -172,6 +238,7 @@ def third_scenario():
     ])
 
     print("Something went wrong, transaction should fail")
+
 
 def fourth_scenario():
     ch = CardanoHandler()
@@ -189,9 +256,9 @@ def fourth_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_first_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -230,6 +297,7 @@ def fourth_scenario():
     print("Alice tried to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to Charlie")
     print("Transaction should work")
 
+
 def fifth_scenario():
     ch = CardanoHandler()
     script_name = "fifth_case"
@@ -246,9 +314,9 @@ def fifth_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_fifth_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     # Now we also need David
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
@@ -273,11 +341,12 @@ def fifth_scenario():
     print(
         "Alice tried to consume the script, giving 4 ADA to Bob and 4 ADA to Charlie"
     )
-    print("Transaction should succeed")
+    print("Transaction should succeed, please restart the node for the next scenario...")
+
 
 def sixth_scenario():
     ch = CardanoHandler()
-    script_name = "first_case" # Same script as first case
+    script_name = "first_case"  # Same script as first case
 
     if not (script_name in ch.scripts):
         raise Exception(f"Script {script_name} not found")
@@ -291,9 +360,9 @@ def sixth_scenario():
 
     # Make sure script is empty
     if ch.wallet_balance(addr) > 0:
-        raise Exception(
-            f"Script {addr} already holds tokens. Make sure it's empty"
-        )
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_first_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS, MAX_TIME)
 
     if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
         raise Exception("Couldn't find Alice, Bob and/or Charlie")
@@ -331,13 +400,14 @@ def sixth_scenario():
         "Alice tried to consume the script, giving 3 ADA to herself, " +
         "3 ADA to Bob, 3 ADA to Charlie and keeping 9 ADA in the script"
     )
-    print("Transaction should succeed")
+    print("Transaction should succeed, please restart the node for the next scenario...")
+
 
 def main():
     if len(sys.argv) == 1:
         print("Command syntax:\npython3 scenarios.py <scenario_number>")
         sys.exit(1)
-    
+
     try:
         num = int(sys.argv[1])
 
