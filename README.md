@@ -59,6 +59,8 @@ minimum UTxO value of 1 ADA. Then Alice consumes the script, giving 3 ADA to
 herself, 3 ADA to Bob and 3 ADA to Charlie. Because the distribution is correct,
 the transaction should validate.
 
+This scenario will show us that simple distributions are indeed working
+
 Before running it, make sure the node is running and is synchronized with the
 testnet.
 
@@ -135,6 +137,9 @@ that now Alice thinks she's really smart, so she'll try to grab all the
 deposited tokens to herself (instead of distributing it). Of course, the script
 validator should fail the transaction.
 
+This scenario will show us that the script is "guarding" the transaction and not
+allowing wrong distributions
+
 As in the first case, make sure the node is 100% synced and that it was
 restarted after the last scenario transaction submission.
 
@@ -169,3 +174,60 @@ The provided Plutus code called 'error'.
 
 and you should see a "Transaction build failed" exception. It meas Alice wasn't
 able to put her devious plan in practice
+
+## Third Scenario
+
+In the third scenario, Alice sends 9 ADA to the script with the same distribution
+as the other scenarios, but with a minimum UTxO value of 4 ADA. Then Alice
+tries to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to
+Charlie. This should, of course, fail, since the values distributed are below
+the minimum threshold.
+
+Execute
+
+```bash
+python3 scenarios.py 3
+```
+
+After following the script instructions and restarting the node every time it
+asked you to (after making sure the balance in the tesnet was correct), you
+should see the final result
+
+```
+Alice will try to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to Charlie. Since this is below the minimum UTxO value, the transaction should fail, throwing an exception
+Command failed: transaction build  Error: The following scripts have execution failures:
+the script for transaction input 1 (in the order of the TxIds) failed with The Plutus script evaluation failed: An error has occurred:  User error:
+The provided Plutus code called 'error'.
+```
+
+It means the transaction failed (exactly what we wanted to happen).
+
+## Fourth scenario
+
+In the fourth scenario, Alice, Bob and Charlie send 3 ADA each to the script
+with the same parameters as in the first and second scenarios. Then, Alice
+consumes the script, distributing it correctly (3 ADA to herself, 3 ADA to Bob
+and 3 ADA to Charlie).
+
+This scenario should show us that it doesn't matter if we are cosuming one or
+multiple UTxOs from the script, it should validate.
+
+Execute
+
+```bash
+python3 scenarios.py 4
+```
+
+After following the steps, restarting the node when asked, you should see the
+following
+
+```
+Alice tried to consume the script, giving 3 ADA to herself, 3 ADA to Bob and 3 ADA to Charlie
+Transaction should work
+```
+
+And the last transaction from the testnet should be something like this
+
+![Example 4 - Expected result](./images/example-4.png)
+
+Restart the node to proceed to the next scenario
