@@ -185,23 +185,36 @@ class Tx(object):
         parsed_outputs = "\n".join(
             map(lambda x: x.commandify(), self.user_outputs + self.script_outputs))
 
-        parsed_collateral = \
-            f"\n--tx-in-collateral {self.collateral.parsed()} \\" if self.collateral else ""
-
         # Make a temporary directory
         os.mkdir(TEMP_PATH)
 
-        build_command = f"""
-            cardano-cli transaction build \\
-                --alonzo-era \\
-                {parsed_inputs}{parsed_collateral}
-                {parsed_outputs}
-                --change-address {self.change_addr} \\
-                --testnet-magic {str(self.handler.magic)} \\
-                --protocol-params-file {str(self.handler.protocol_parameters)} \\
-                --out-file {TEMP_PATH}/tx.raw
-        """
-        
+        if self.collateral:
+            parsed_collateral = \
+                f"--tx-in-collateral {self.collateral.parsed()} \\"
+
+            build_command = f"""
+                cardano-cli transaction build \\
+                    --alonzo-era \\
+                    {parsed_inputs}
+                    {parsed_collateral}
+                    {parsed_outputs}
+                    --change-address {self.change_addr} \\
+                    --testnet-magic {str(self.handler.magic)} \\
+                    --protocol-params-file {str(self.handler.protocol_parameters)} \\
+                    --out-file {TEMP_PATH}/tx.raw
+            """
+        else:
+            build_command = f"""
+                cardano-cli transaction build \\
+                    --alonzo-era \\
+                    {parsed_inputs}
+                    {parsed_outputs}
+                    --change-address {self.change_addr} \\
+                    --testnet-magic {str(self.handler.magic)} \\
+                    --protocol-params-file {str(self.handler.protocol_parameters)} \\
+                    --out-file {TEMP_PATH}/tx.raw
+            """
+
         exit_code = os.system(build_command)
 
         if exit_code != 0:
