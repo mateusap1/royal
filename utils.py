@@ -37,9 +37,9 @@ def tx_out_wrap(address, amount):
     return f"--tx-out {address}+{amount} \\"
 
 
-def wait_for_balance(handler, addr, blc, intervals, max_time):
+def wait_for_balance(handler, addr, blc, intervals):
     i = 0
-    while i < max_time:
+    while True:
         if (handler.wallet_balance(addr) == blc):
             break
 
