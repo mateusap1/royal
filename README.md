@@ -64,13 +64,13 @@ After making sure the wallet corresponding to Alice has enough ADA, you should
 be able to compile a script with the distribution you prefer, the next video
 will teach you that
 
-[![Create Script Thumbnail]({./images/thumb-generate-keys.png})]({https://www.dropbox.com/s/0ebt7fuxo7j2a4l/create-scripts.mp4?dl=0} "Create Script")
+[Create Script Video](https://www.dropbox.com/s/0ebt7fuxo7j2a4l/create-scripts.mp4?dl=0)
 
 We are almost done, but, before jumping into python, you should learn how to
 setup the node and the cli so you're actually able to build and submit
 transactions. Take a look at the next video
 
-[![Setup Node Thumbnail]({./images/thumb-setup-node.png})]({https://www.dropbox.com/s/jl0qo7ytewjeoz0/setup-node.mp4?dl=0} "Setup Node")
+[Setup Node Video](https://www.dropbox.com/s/jl0qo7ytewjeoz0/setup-node.mp4?dl=0)
 
 Mentioned links
 * [Cardano guide on the node installation](https://docs.cardano.org/getting-started/installing-the-cardano-node)
@@ -83,7 +83,7 @@ distribute it's tokens. Remember to change the name from the script you created
 will go over in much detail on how to use the python wrapper to be able to
 create scripts and consume them
 
-[![Run Scenario Thumbnail]({./images/thumb-run-scenario.png})]({https://www.dropbox.com/s/b8p4b67hsbzfrsl/run-scenario.mp4?dl=0} "Run Scenario")
+[Run Scenario Video](https://www.dropbox.com/s/b8p4b67hsbzfrsl/run-scenario.mp4?dl=0)
 
 Mentioned links:
 *[Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/)
