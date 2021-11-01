@@ -98,6 +98,64 @@ def empty_fifth_case_script():
         {"user_address": charlie.addr, "amount": int(blc/2)+1}
     ])
 
+def empty_new_case_script():
+    ch = CardanoHandler()
+    script_name = "new_script"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+    blc = ch.wallet_balance(addr)
+
+    # Make sure script is not empty
+    if blc == 0:
+        raise Exception(
+            f"Script {addr} already holds tokens. Make sure it's not empty"
+        )
+    
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    alice = ch.users["alice"]
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": alice.addr, "amount": int((6/10)*blc)+100},
+        {"user_address": bob.addr, "amount": int((1/10)*blc)+100},
+        {"user_address": charlie.addr, "amount": int((3/10)*blc)+100}
+    ])
+
+def empty_new_script():
+    ch = CardanoHandler()
+    script_name = "new_script"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+    blc = ch.wallet_balance(addr)
+
+    # Make sure script is not empty
+    if blc == 0:
+        raise Exception(
+            f"Script {addr} already holds tokens. Make sure it's not empty"
+        )
+    
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    alice = ch.users["alice"]
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": alice.addr, "amount": int((60/100)*blc)+100},
+        {"user_address": bob.addr, "amount": int((10/100)*blc)+100},
+        {"user_address": charlie.addr, "amount": int((30/100)*blc)+100}
+    ])
+
 
 def first_scenario():
     ch = CardanoHandler()
@@ -394,6 +452,89 @@ def sixth_scenario():
     )
     print("Transaction should succeed")
 
+def new_scenario():
+    ch = CardanoHandler()
+    script_name = "new_script"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+
+    print(
+        f"Using script {addr} with the distribution 60% to Alice, " +
+        "10% to Bob and 30% to Charlie and minimum utxo value of 1 ADA"
+    )
+
+    # Make sure script is empty
+    if ch.wallet_balance(addr) > 0:
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_new_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS)
+
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    alice = ch.users["alice"]
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    # Alice sends 10 ADA to the scipt
+    ch.send_to_script("alice", script_name, ada(10))
+
+    print(f"10 ADA sent from Alice to {addr}")
+
+    wait_for_balance(ch, addr, ada(10), INTERVALS)
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": alice.addr, "amount": ada(8)},
+        {"user_address": bob.addr, "amount": ada(1)},
+        {"user_address": charlie.addr, "amount": ada(1)}
+    ])
+
+def new_scenario():
+    ch = CardanoHandler()
+    script_name = "new_script"
+
+    if not (script_name in ch.scripts):
+        raise Exception(f"Script {script_name} not found")
+
+    addr = ch.script_address(script_name)
+
+    print(
+        f"Using script {addr} with the distribution 60% to Alice, " +
+        "10% to Bob and 30% to Charlie and minimum utxo value of 1 ADA"
+    )
+
+    # Make sure script is empty
+    if ch.wallet_balance(addr) > 0:
+        print(f"Script not empty, calling function to empty {addr}")
+        empty_new_case_script()
+        wait_for_balance(ch, addr, 0, INTERVALS)
+
+    if not (all([x in ch.users for x in ["alice", "bob", "charlie"]])):
+        raise Exception("Couldn't find Alice, Bob and/or Charlie")
+
+    alice = ch.users["alice"]
+    bob = ch.users["bob"]
+    charlie = ch.users["charlie"]
+
+    # Alice sends 10 ADA to the scipt
+    ch.send_to_script("alice", script_name, ada(10))
+
+    print(f"10 ADA sent from Alice to {addr}")
+
+    wait_for_balance(ch, addr, ada(10), INTERVALS)
+
+    ch.distribute_from_script("alice", script_name, [
+        {"user_address": alice.addr, "amount": ada(6)},
+        {"user_address": bob.addr, "amount": ada(1)},
+        {"user_address": charlie.addr, "amount": ada(3)}
+    ])
+
+    print("Transaction should succeed")
+
+
 
 def main():
     if len(sys.argv) == 1:
@@ -403,7 +544,7 @@ def main():
     try:
         num = int(sys.argv[1])
 
-        if (num < 0) or (num > 6):
+        if (num < 0) or (num > 7):
             print("Command argument must be number between 1 and 6")
             sys.exit(1)
         elif num == 1:
@@ -418,6 +559,8 @@ def main():
             fifth_scenario()
         elif num == 6:
             sixth_scenario()
+        elif num == 7:
+            new_scenario()
 
     except ValueError:
         print("Command argument must be number between 1 and 6")

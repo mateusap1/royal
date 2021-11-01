@@ -1,0 +1,39 @@
+{
+  "dsMinUtxoValue": {
+    "getValue": [
+      [
+        {
+          "unCurrencySymbol": ""
+        },
+        [
+          [
+            {
+              "unTokenName": ""
+            },
+            1000000
+          ]
+        ]
+      ]
+    ]
+  },
+  "dsDistributionMapping": [
+    [
+      {
+        "getPubKeyHash": "3e7181860513a17dfa44d69232429e5c328e79c748d4a176950c42b6" 
+      },
+      33
+    ],
+    [
+      {
+        "getPubKeyHash": "0e9060519f8497348ba2530fa400650af3f5e8bc6ea3ceeba203b0ea"
+      },
+      33
+    ],
+    [
+      {
+        "getPubKeyHash": "be68f41554788493aaf57eff1651885caa753057e03f998cad35043d"
+      },
+      33
+    ]
+  ]
+}

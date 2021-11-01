@@ -1,0 +1,8 @@
+cradle:
+  cabal:
+    - path: "./src"
+      component: "lib:royal"
+    - path: "./test"
+      component: "test:royal-tests"
+    - path: "./app/compile.hs"
+      component: "exe:build-script"

@@ -5,57 +5,88 @@ python wrapper around cardano-cli. After that, I made six functions, each one
 testing a different scenario I thought could show script vulnerabilities.
 
 ## Table Of Contents
-* [Setup](#setup)
-* [First Scenario](#first-scenario)
-* [Second Scenario](#second-scenario)
-* [Third Scenario](#third-scenario)
-* [Fourth Scenario](#fourth-scenario)
-* [Fifth Scenario](#fifth-scenario)
-* [Sixth Scenario](#sixth-scenario)
 
-## Setup
+- [Overview](#overview)
+- [First Scenario](#first-scenario)
+- [Second Scenario](#second-scenario)
+- [Third Scenario](#third-scenario)
+- [Fourth Scenario](#fourth-scenario)
+- [Fifth Scenario](#fifth-scenario)
+- [Sixth Scenario](#sixth-scenario)
 
-Before moving into the scenarios and how to try them in the testnet, make sure that
-cardano-node and cardano-cli are installed
+## Overview
+
+This repository contains a python wrapper around cardano-cli, which allows you
+to submit transactions, query the blockchain and find script addresses in
+python.
+
+Additionally, there is a "scenarios.py" script containing multiple scenarios
+in which ADA is sent to one of our scripts and someone tries to distribute the
+value inside. Either incorrectly, hopefuly making the script fail, or correctly
+making the transaction succed, which can be confirmed in the
+[testnet explorer](https://explorer.cardano-testnet.iohkdev.io/en.html).
+
+Other than the python scripts, we have a haskell folder where the plutus script
+is compiled based on the distribution and minimum utxo values passed.
+
+Let's setup our environment and make sure we understand the ideas behind each
+module. See if you have nix installed by executing the following command
 
 ```bash
-cardano-node --version
+nix-env --version
 ```
 
-```bash
-cardano-cli --version
-```
+If it's not installed, take a look at [this helpful
+guide](https://docs.plutus-community.com/docs/setup/Ubuntu.html)
 
-If they are not, you may follow the intructions
-[here](https://docs.cardano.org/getting-started/installing-the-cardano-node).
+After you made sure you have nix installed, take a look at the following video,
+which will help you setup the nix environment in order to be able to build
+scripts and test them
 
-After you made sure both executables are installed, run cardano node in the
-testnet mode. The following is the command I run, but depending on how you
-installed cardano-node, your command may look different
+[![Setup Nix Thumbnail]({./images/thumb-setup-nix.png})]({https://www.dropbox.com/s/2hgeppcqw5s17po/setup-nix.mp4?dl=0} "Setup Nix")
 
-```bash
-cardano-node run \
-    --topology testnet-topology.json \
-    --database-path db \
-    --socket-path node.socket \
-    --host-addr 0.0.0.0 \
-    --port 3001 \
-    --config testnet-config.json \
-```
+Mentioned links:
+* [Plutus repository](https://github.com/input-output-hk/plutus)
+* [Community Docs](https://docs.plutus-community.com/)
 
-After this, take a look at "data/info.json" and insert the information you will
-use. For the scenarios to work you need three users: "alice", "bob" and
-"charlie". The "path" argument from each user is a folder where the keys and
-address from the specific user are located ("payment.addr", "payment.vkey",
-"payment.skey"). They should all have the name "payment" and be located at
-individual folders.
+After you've watched the video and was able to have nix-shell running in one of
+your terminal instances, the following video should give you a good idea on how
+to generate keys, which will be necessary for running the multiple scenarios
 
-If you don't know how to generate keys, take a look at
-[this guide](https://cardano-foundation.gitbook.io/stake-pool-course/stake-pool-guide/stake-pool-operations/keys_and_addresses).
-Also, make sure that Alice has a reasonable amount of tADA, since we'll be using
-that a lot. You can get some free tADA in
-[this page](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
+[![Generate Keys Thumbnail]({./images/thumb-generate-keys.png})]({https://www.dropbox.com/s/195cq4n8cmj6vj1/generate-keys.mp4?dl=0} "Generate Keys")
 
+Now that you have three separate folders with each one containing "payment.<key-type>"
+files, make sure the alice address receives enough ADA to test our scenarios.
+You can do this by filling
+[this faucet form](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/).
+
+After making sure the wallet corresponding to Alice has enough ADA, you should
+be able to compile a script with the distribution you prefer, the next video
+will teach you that
+
+[![Create Script Thumbnail]({./images/thumb-generate-keys.png})]({https://www.dropbox.com/s/0ebt7fuxo7j2a4l/create-scripts.mp4?dl=0} "Create Script")
+
+We are almost done, but, before jumping into python, you should learn how to
+setup the node and the cli so you're actually able to build and submit
+transactions. Take a look at the next video
+
+[![Setup Node Thumbnail]({./images/thumb-setup-node.png})]({https://www.dropbox.com/s/jl0qo7ytewjeoz0/setup-node.mp4?dl=0} "Setup Node")
+
+Mentioned links
+* [Cardano guide on the node installation](https://docs.cardano.org/getting-started/installing-the-cardano-node)
+* [Hydra node binaries](https://hydra.iohk.io/build/7739415)
+* [Configuration files](https://hydra.iohk.io/build/7366583/download/1/index.html)
+
+Finally, you're ready to publish the script you created in the tesnet and try to
+distribute it's tokens. Remember to change the name from the script you created
+"result.plutus" to "new_script.plutus". The next video, though a little bit long,
+will go over in much detail on how to use the python wrapper to be able to
+create scripts and consume them
+
+[![Run Scenario Thumbnail]({./images/thumb-run-scenario.png})]({https://www.dropbox.com/s/b8p4b67hsbzfrsl/run-scenario.mp4?dl=0} "Run Scenario")
+
+Mentioned links:
+*[Faucet](https://testnets.cardano.org/en/testnets/cardano/tools/faucet/)
 
 Finally, we can start to run our scenarios
 
@@ -77,6 +108,7 @@ cardano-cli query tip --tesnet-magic 1097911063
 ```
 
 Should return something like this
+
 ```bash
 {
     "epoch": 165,

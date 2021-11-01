@@ -270,7 +270,6 @@ class CardanoHandler (object):
 
             self.magic = parsed["magic"]
             self.protocol_parameters = parsed["protocol_params_file"]
-            self.node = parsed["node"]
 
             for user in parsed["users"]:
                 self.users[user["name"]] = User(user["name"], user["path"])
