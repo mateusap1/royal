@@ -43,7 +43,7 @@ After you made sure you have nix installed, take a look at the following video,
 which will help you setup the nix environment in order to be able to build
 scripts and test them
 
-[![Setup Nix Thumbnail]({./images/thumb-setup-nix.png})]({https://www.dropbox.com/s/2hgeppcqw5s17po/setup-nix.mp4?dl=0} "Setup Nix")
+[Setup Nix Video](https://www.dropbox.com/s/2hgeppcqw5s17po/setup-nix.mp4?dl=0)
 
 Mentioned links:
 * [Plutus repository](https://github.com/input-output-hk/plutus)
@@ -53,7 +53,7 @@ After you've watched the video and was able to have nix-shell running in one of
 your terminal instances, the following video should give you a good idea on how
 to generate keys, which will be necessary for running the multiple scenarios
 
-[![Generate Keys Thumbnail]({./images/thumb-generate-keys.png})]({https://www.dropbox.com/s/195cq4n8cmj6vj1/generate-keys.mp4?dl=0} "Generate Keys")
+[Generate Keys Video](https://www.dropbox.com/s/195cq4n8cmj6vj1/generate-keys.mp4?dl=0)
 
 Now that you have three separate folders with each one containing "payment.<key-type>"
 files, make sure the alice address receives enough ADA to test our scenarios.
